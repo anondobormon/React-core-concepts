@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
   // let person ={
@@ -14,33 +15,125 @@ function App() {
   //   color: 'red',
   //   backgroundColor: 'yellow'
   // }
+  const country = ['Bangladesh', 'india', 'Singapore', 'NewZiland', 'Itali', 'lebanon']
+  const products = [
+    {name: 'Laptop', price:'$300'},
+    {name: 'Mobile', price:'$100'},
+    {name: 'HeadPhone', price:'$10'},
+    {name: 'Ipad', price:'$800'},
+  ]
+  const productNames = products.map(product => product.name)
+  console.log(productNames);
   return (
     <div className="App">
       <header className="App-header">
         <p>I am a React Person</p>
-        <Product></Product>
 
-        <Person name='Lal Mia' profession='Business'></Person>
-        <Person name='Kharaj Babu' profession='Business'></Person>
+        <Counter></Counter>
+        <Users></Users>
+        <ul>
+          {
+            country.map(country => <li>{country}</li>)
+          }
+          {
+            products.map(product => <li>{product.name}</li>)
+          }
+        </ul>
+        {
+          products.map(product => <Product product={product}></Product>)
+        }
+        <Product product={products[1]}></Product>
+
+        {/* <Person name='Lal Mia' profession='Business'></Person>
+        <Person name='Kharaj Babu' profession='Business'></Person> */}
         
       </header>
     </div>
   );
 }
 
-function Product(Props){
-  const productStyle = {
+
+//Load API
+function Users(){
+  const [users, setUsers] = useState([])
+  useEffect(() =>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))
+  },[])
+  let pdStyle = {
+    boxSizing: 'border-box',
     border: '2px solid white',
     borderRadius:'5px',
     backgroundColor: 'lightgray',
     height: '200px',
     width: '200px',
-    color: 'black'
+    color: 'black',
+    margin: '10px'
   }
   return(
+    <div>
+      <p>Popular User:</p>
+      
+        {
+          users.map(user =>{
+            // console.log(user.name);
+            <div style={pdStyle}>
+              {console.log(user.name)}
+              {<h3>{user.name}</h3>}
+              <h3>{user.phone}</h3>
+            
+            </div>
+          })
+        }
+      
+    </div>
+  )
+}
+
+
+//use state
+
+function Counter(){
+  const [count, setCount] = useState(10)
+  // const handle = () => {
+  //   setCount(count + 1)
+  // }
+  // const decrease = () => {
+  //   setCount(count-1)
+  // }
+  return(
+    <div>
+      <h2>Count: {count}</h2>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+      <button onClick={() => setCount(count - 1)}>Decrease</button>
+    </div>
+  )
+}
+
+
+
+
+//component
+function Product(props){
+  let productStyle = {
+    boxSizing: 'border-box',
+    border: '2px solid white',
+    borderRadius:'5px',
+    backgroundColor: 'lightgray',
+    height: '200px',
+    width: '200px',
+    color: 'black',
+    margin: '10px'
+  }
+  // console.log(props)
+  //distructuring object
+
+  const {name, price} = props.product
+  return(
     <div style={productStyle}>
-      <h2>Name:</h2>
-      <h4>Price: </h4>
+      <h2>{name}</h2>
+      <h4>{price}</h4>
       <button>Buy Now</button>
     </div>
   )
@@ -50,15 +143,15 @@ function Product(Props){
 
 
 
-function Person(props){
-  return(
-    <div style={{border: '2px solid gold', width: '400px', height: '200px', margin: '10px', backgroundColor: 'lightgray'}}>
-      <h3>My Name: {props.name}</h3>
-      <p>My Profession: {props.profession}</p>
-      <button>View More</button>
-    </div>
-  )
-}
+// function Person(props){
+//   return(
+//     <div style={{border: '2px solid gold', width: '400px', height: '200px', margin: '10px', backgroundColor: 'lightgray'}}>
+//       <h3>My Name: {props.name}</h3>
+//       <p>My Profession: {props.profession}</p>
+//       <button>View More</button>
+//     </div>
+//   )
+// }
 
 
 
